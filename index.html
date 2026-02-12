@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Mission Control v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #061e1b; color: #f8fafc; overflow-x: hidden; }
@@ -35,7 +33,6 @@
 </head>
 <body class="p-8 md:p-12">
 
-    <!-- Header -->
     <header class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div class="flex items-center gap-6">
             <div class="w-16 h-16 bg-[#0a2a26] border border-emerald-900/30 rounded-xl flex items-center justify-center shadow-2xl">
@@ -45,7 +42,7 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-4xl font-extrabold tracking-tighter text-white">Mission Control <span class="text-emerald-500">v2.0</span></h1>
+                <h1 class="text-4xl font-extrabold tracking-tighter text-white">Mission Control <span class="text-emerald-500">v2.1</span></h1>
                 <p class="text-emerald-900 uppercase tracking-[0.3em] text-[10px] font-bold mt-1">Institutional Partnership OS</p>
             </div>
         </div>
@@ -55,77 +52,88 @@
         </div>
     </header>
 
-    <!-- Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <!-- To Do -->
         <div class="space-y-6">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xs font-black uppercase tracking-[0.4em] text-slate-500">01 // Queue</h2>
-                <span id="todo-count" class="bg-slate-800 text-slate-400 text-[10px] px-2 py-0.5 rounded-full">3</span>
+                <span id="todo-count" class="bg-slate-800 text-slate-400 text-[10px] px-2 py-0.5 rounded-full">0</span>
             </div>
-            <div id="todo-list" class="kanban-column space-y-4">
-                <!-- Injected -->
-            </div>
+            <div id="todo-list" class="kanban-column space-y-4"></div>
         </div>
 
-        <!-- In Progress -->
         <div class="space-y-6">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xs font-black uppercase tracking-[0.4em] text-amber-500">02 // Active Build</h2>
-                <span id="inprogress-count" class="bg-amber-900/20 text-amber-500 text-[10px] px-2 py-0.5 rounded-full">2</span>
+                <span id="inprogress-count" class="bg-amber-900/20 text-amber-500 text-[10px] px-2 py-0.5 rounded-full">0</span>
             </div>
-            <div id="inprogress-list" class="kanban-column space-y-4">
-                <!-- Injected -->
-            </div>
+            <div id="inprogress-list" class="kanban-column space-y-4"></div>
         </div>
 
-        <!-- Done -->
         <div class="space-y-6">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xs font-black uppercase tracking-[0.4em] text-emerald-500">03 // Completed</h2>
-                <span id="done-count" class="bg-emerald-900/20 text-emerald-500 text-[10px] px-2 py-0.5 rounded-full">12</span>
+                <span id="done-count" class="bg-emerald-900/20 text-emerald-500 text-[10px] px-2 py-0.5 rounded-full">0</span>
             </div>
-            <div id="done-list" class="kanban-column space-y-4">
-                <!-- Injected -->
-            </div>
+            <div id="done-list" class="kanban-column space-y-4"></div>
         </div>
-
     </div>
 
     <script>
-        const tasks = {
-            todo: [
-                "Connect `scraper_v0.py` to Gemini Cluster for live problem-scouting.",
-                "Schedule automated \"Market Scouter\" run (Midnight).",
-                "Draft outreach sequence for Monica, Ashna, and Sakchi."
-            ],
-            inprogress: [
-                "Build basic structure for Content Engine Trend Scraper.",
-                "Initial research into Indian 10k-50k creator niche."
-            ],
-            done: [
-                "Apply \"Maintenance PR\" (58% context cleanup complete).",
-                "Initialize workspace and identity.",
-                "Schedule Daily Context Audit (2 AM).",
-                "Configure Ollama local model engine (`gemma3:4b`).",
-                "Configure Gemini Failover Cluster for web tasks (5 Models).",
-                "Create high-resolution logo assets (Royal Emerald theme).",
-                "Integrate brand logo into Mission Control dashboard.",
-                "Lockdown security and audit system (3 AM).",
-                "Configure Daily GitHub Backups (4 AM).",
-                "Localize Monetization Strategy for India (₹).",
-                "Finalize Automated PDF Audit Report engine (Clean 0-margin).",
-                "Perform deep analysis on first 3 Indian Creator targets."
-            ]
-        };
+        async function loadTasks() {
+            const rawMd = `# Mission Control: Task Ledger
 
-        function renderColumn(id, list, countId, accentClass) {
+## 📋 To Do
+- [ ] Connect \`scraper_v0.py\` to Gemini Cluster for live problem-scouting.
+- [ ] Schedule automated "Market Scouter" run (Midnight).
+- [ ] Draft outreach sequence for Monica, Ashna, and Sakchi.
+- [ ] Draft script for "Genesis" YouTube video (Nexus setup reveal).
+
+## 🏗️ In Progress
+- [x] Apply "Maintenance PR" (58% context cleanup complete).
+- [x] Build basic structure for Content Engine Trend Scraper.
+- [x] Initial research into Indian 10k-50k creator niche.
+
+## ✅ Done
+- [x] Initialize workspace and identity.
+- [x] Schedule Daily Context Audit (2 AM).
+- [x] Configure Ollama local model engine (\`gemma3:4b\`).
+- [x] Configure Gemini Failover Cluster for web tasks (5 Models).
+- [x] Create high-resolution logo assets (Royal Emerald theme).
+- [x] Integrate brand logo into Mission Control dashboard.
+- [x] Lockdown security and audit system (3 AM).
+- [x] Configure Daily GitHub Backups (4 AM).
+- [x] Localize Monetization Strategy for India (₹).
+- [x] Finalize Automated PDF Audit Report engine (Clean 0-margin).
+- [x] Perform deep analysis on first 3 Indian Creator targets.
+- [x] Generate personalized "Monetization Audit" PDFs (V2).
+- [x] Deploy 3 Public GitHub Pages (Portfolio, Content Engine, Dashboard).
+- [x] Operationalize Hourly Status Check-ins.
+- [x] Initialize "Nexus Journey" (Content Strategy & Extension Plan).
+- [x] Schedule "Nexus Journey" Content Routine (Daily at 8 AM, Weekly at 10 AM).
+`;
+            
+            const sections = { todo: [], inprogress: [], done: [] };
+            let currentSection = '';
+            rawMd.split('\n').forEach(line => {
+                if (line.includes('## 📋 To Do')) currentSection = 'todo';
+                else if (line.includes('## 🏗️ In Progress')) currentSection = 'inprogress';
+                else if (line.includes('## ✅ Done')) currentSection = 'done';
+                else if (line.startsWith('- [') && currentSection) {
+                    sections[currentSection].push(line.substring(6).trim());
+                }
+            });
+
+            renderColumn('todo-list', sections.todo, 'todo-count');
+            renderColumn('inprogress-list', sections.inprogress, 'inprogress-count');
+            renderColumn('done-list', sections.done, 'done-count');
+        }
+
+        function renderColumn(id, list, countId) {
             const container = document.getElementById(id);
             const countEl = document.getElementById(countId);
             countEl.innerText = list.length;
             
-            container.innerHTML = list.map((task, i) => `
+            container.innerHTML = list.map((task) => `
                 <div class="task-card p-6 rounded-2xl shadow-xl relative overflow-hidden group">
                     <div class="shimmer absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"></div>
                     <div class="flex gap-4">
@@ -136,9 +144,7 @@
             `).join('');
         }
 
-        renderColumn('todo-list', tasks.todo, 'todo-count');
-        renderColumn('inprogress-list', tasks.inprogress, 'inprogress-count');
-        renderColumn('done-list', tasks.done, 'done-count');
+        loadTasks();
     </script>
 </body>
 </html>
